@@ -6,3 +6,6 @@
 Creating a new branch is quick and simple.
 
 creat master branch.
+Creating a new branch is quick AND simple.
+
+creat featurel branch.
