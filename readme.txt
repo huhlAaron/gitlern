@@ -3,5 +3,4 @@
 
 1、branch test 1
 0 directories, 1 file
-
-Creating a new branch is quick & simple
+Creating a new branch is quick and simple.
