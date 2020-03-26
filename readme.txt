@@ -10,3 +10,7 @@ Creating a new branch is quick AND simple.
 
 creat featurel branch.
 ctreat th branch.
+
+report by master.
+
+fix bug-101.
