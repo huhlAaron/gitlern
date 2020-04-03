@@ -1,0 +1,6 @@
+1、协议接口
+https://apizza.net/pro/#/project/98b08ed81252080888bbe724f30fddfa/browse
+
+2、服务器地址
+http://dcpay.decard.com:40021
+

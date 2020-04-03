@@ -1,0 +1,14 @@
+1、公钥下载:无参下载
+
+2、设备签到请求数据
+	val shop_num:String, 
+	val crypt:String, 
+	val sn:String= DeviceUtils.getSnCode(), 
+	val model:String= DeviceUtils.deviceModel
+	
+	参数说明：
+	shop_num 商户号
+	model 设备类型
+	crypt 随机数密文
+	sn 设备sn编号
+

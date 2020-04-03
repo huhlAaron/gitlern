@@ -1,0 +1,103 @@
+#****************************This is Project Info****************************
+#PROJECT(avxallocate)
+PROJECT(decrdpolymerpey)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+ 
+#****************************This is Compile Flag****************************
+if(HOST_NAME MATCHES linux)
+	message( STATUS "==============================linux debug==============================" )        
+	SET(CMAKE_C_COMPILER   arm-linux-gnueabihf-gcc)
+    SET(CMAKE_CXX_COMPILER arm-linux-gnueabihf-g++)
+elseif((HOST_NAME MATCHES android))
+	if(DEBUG)        
+		message( STATUS "==============================android debug==============================" )        
+		ADD_DEFINITIONS(-g)
+		ADD_DEFINITIONS(-D AVX_DEBUG_LEVEL=AVX_DEBUG_DEBUG)
+	else(DEBUG)   
+		message( STATUS "==============================android release==============================" )         
+		ADD_DEFINITIONS(-O2)
+		ADD_DEFINITIONS(-D AVX_DEBUG_LEVEL=AVX_DEBUG_INFO)
+	endif()
+endif()
+
+#ADD_DEFINITIONS("-Wall")
+#ADD_DEFINITIONS("-fPIC")
+#ADD_DEFINITIONS("-Wl,-lm")
+#ADD_DEFINITIONS("-std=gnu++11")
+#add_definitions(-Wformat=0)
+#ADD_DEFINITIONS(-Wpointer-sign)
+#ADD_DEFINITIONS(-Wunused-variable)
+#ADD_DEFINITIONS(-Wimplicit-function-declaration)
+#ADD_DEFINITIONS(-Wformat=0)
+#ADD_DEFINITIONS(-Wunused-label)
+ADD_DEFINITIONS ("-w")
+#ADD_DEFINITIONS ("-v")
+SET(CMAKE_C_FLAGS "-fPIC -Wl,-Bsymbolic -lz -lm -lcurl -D__STDINT_LIMITS -D__STDINT_MACROS -D__ANDROID__ -DANDROID")
+
+#****************************This is Include File/Directories****************************
+#INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR}/)
+#INCLUDE_DIRECTORIES(../../libextern/Android/include)
+set(inc_file_path_list
+	/src/inc
+	/src/inc/libssh2inc
+	/src/inc/ums
+	/src/src_api/inc
+	/src/src_driver/inc
+	/src/src_test/inc
+	/src/src_net/inc
+	/src/src_net/inc/curl
+	/src/src_pub/inc
+	/src/src_inc
+	/src/src_msg/inc
+	/src/src_db/inc)
+foreach(inc_path_list ${inc_file_path_list})
+	INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}${inc_path_list})
+endforeach(inc_path_list)
+ 
+#****************************This is Source File/Directories****************************
+#SET(DIR_SRCS ../AVXAllocate.cpp)
+set(src_file_path_list
+	/src/src_api/src
+	/src/src_driver/src
+	/src/src_test/src
+	/src/src_net/src
+	/src/src_pub/src
+	/src/src_msg/src
+	/src/src_db/src)
+foreach(src_path_list ${src_file_path_list})
+	aux_source_directory(${PROJECT_BINARY_DIR}${src_path_list} DIR_SRCS)
+endforeach(src_path_list)
+
+#****************************This is Library Directories****************************
+#LINK_DIRECTORIES(../../libextern/Android/lib)
+if(HOST_NAME MATCHES linux)
+	LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/src/lib/linux)
+elseif((HOST_NAME MATCHES android))
+	LINK_DIRECTORIES(${PROJECT_BINARY_DIR}/src/lib/android)
+endif()
+ 
+#****************************This is 3Party Library****************************
+#LINK_LIBRARIES(pthread)
+LINK_LIBRARIES(curl)
+#LINK_LIBRARIES(crypto)
+LINK_LIBRARIES(sqlite3)
+#LINK_LIBRARIES(ssh2)
+LINK_LIBRARIES(GMAlg)
+#LINK_LIBRARIES(ums)
+
+#****************************This is Output Directory****************************
+if(HOST_NAME MATCHES android)
+	SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/lib_android)
+	SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/lib_android)
+	SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/lib_android)
+elseif((HOST_NAME MATCHES linux))
+	SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/lib_linux)
+	SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/lib_linux)
+	SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/lib_linux)
+endif()
+ 
+#****************************This is Output Library****************************
+ADD_LIBRARY(decrdpolymerpey SHARED ${DIR_SRCS} )
+ADD_LIBRARY(decrdpolymerpey_static STATIC  ${DIR_SRCS} )
+SET_TARGET_PROPERTIES (decrdpolymerpey_static PROPERTIES OUTPUT_NAME "decrdpolymerpey")
+#TARGET_LINK_LIBRARIES(decrdpolymerpey)
